@@ -1,0 +1,16 @@
+PODS:
+  - QRScanner (0.1.0)
+
+DEPENDENCIES:
+  - QRScanner (from `../`)
+
+EXTERNAL SOURCES:
+  QRScanner:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  QRScanner: 70bb0806b6c575161b9a9e6d84ea02180043efc2
+
+PODFILE CHECKSUM: c489925de1d5133a5d7cf1cee5b4884b10ecc2ed
+
+COCOAPODS: 1.6.0.beta.2

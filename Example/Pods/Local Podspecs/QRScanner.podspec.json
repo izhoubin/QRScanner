@@ -1,0 +1,22 @@
+{
+  "name": "QRScanner",
+  "version": "0.1.0",
+  "summary": "A short description of QRScanner.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/izhoubin/QRScanner",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "izhoubin": "121160492@qq.com"
+  },
+  "source": {
+    "git": "https://github.com/izhoubin/QRScanner.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source_files": "QRScanner/Classes/**/*"
+}
