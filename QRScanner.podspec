@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'QRScanner'
-  s.version          = '0.0.3'
+  s.version          = '0.0.4'
   s.summary          = 'Lightweight qrCode Scanner with Swift 4.2.'
 
 # This description is used to generate tags and improve search results.
