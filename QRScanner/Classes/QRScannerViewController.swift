@@ -12,7 +12,7 @@ public protocol QRScannerDelegate:class {
     func qrScannerDidSuccess(scanner:QRScannerViewController, result:String)
 }
 
-public class QRScannerViewController: UIViewController {
+open class QRScannerViewController: UIViewController {
     
     let cameraPreview: UIView = UIView()
     let squareView = QRScannerSquareView()
@@ -35,7 +35,7 @@ public class QRScannerViewController: UIViewController {
         return nil
     }()
     
-    override public func viewDidLoad() {
+    override open func viewDidLoad() {
         super.viewDidLoad()
         setupCameraSession()
         checkPermissions()
@@ -43,7 +43,7 @@ public class QRScannerViewController: UIViewController {
         setUpLayers()
     }
     
-    public override func viewDidAppear(_ animated: Bool) {
+    override open func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         squareView.startAnimation()
     }
@@ -54,7 +54,7 @@ public class QRScannerViewController: UIViewController {
         }
     }
     
-    override public func viewDidLayoutSubviews() {
+    override open func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         previewLayer?.frame = cameraPreview.bounds
         maskLayer.frame = view.bounds
