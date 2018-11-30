@@ -12,7 +12,7 @@ public protocol QRScannerDelegate:class {
     func qrScannerDidSuccess(scanner:QRScannerViewController, result:String)
 }
 
-public final class QRScannerViewController: UIViewController {
+public class QRScannerViewController: UIViewController {
     
     let cameraPreview: UIView = UIView()
     let squareView = QRScannerSquareView()
