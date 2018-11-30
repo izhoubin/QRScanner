@@ -10,25 +10,30 @@ import UIKit
 import QRScanner
 class ViewController: UIViewController{
     
-    let qr = QRScannerViewController()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
         // Do any additional setup after loading the view, typically from a nib.
-        qr.delegate = self
+        
     }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        present(qr, animated: true, completion: nil)
+    @IBAction func startScan(_ sender: Any) {
+        let qr = QRScannerViewController()
+        qr.delegate = self
+        navigationController?.pushViewController(qr, animated: true)
     }
 }
 extension ViewController:QRScannerDelegate{
     func qrScannerDidFail(scanner: QRScannerViewController, error: Error) {
-        print(error.localizedDescription)
+        let alert = UIAlertController(title: "Fail!", message: error.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Close", style: UIAlertActionStyle.cancel, handler: nil))
+        scanner.present(alert, animated: true, completion: nil)
     }
     
     func qrScannerDidSuccess(scanner: QRScannerViewController, result: String) {
-        print(result)
+        let alert = UIAlertController(title: "Success!", message: result, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Close", style: UIAlertActionStyle.cancel, handler: nil))
+        scanner.present(alert, animated: true, completion: nil)
     }
 }
 

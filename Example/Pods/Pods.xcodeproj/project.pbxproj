@@ -15,6 +15,8 @@
 		77654C6653391B8223542FE54DD6FE1B /* Pods-QRScanner_Tests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 89EB8DC56F9DD932E7FE21A36159BFB9 /* Pods-QRScanner_Tests-dummy.m */; };
 		8860F7C421AFD26B0007A2B5 /* QRScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8860F7C321AFD26B0007A2B5 /* QRScannerViewController.swift */; };
 		8860F7C821AFD7BD0007A2B5 /* QRScanner.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8860F7C721AFD7BD0007A2B5 /* QRScanner.bundle */; };
+		88B0329E21B0C69C00DD0D88 /* QRScannerSquareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88B0329D21B0C69C00DD0D88 /* QRScannerSquareView.swift */; };
+		88B032A021B0C70C00DD0D88 /* QRScannerPermissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88B0329F21B0C70C00DD0D88 /* QRScannerPermissions.swift */; };
 		8D628E7019A4904FB2C827E9C8D1F4EA /* QRScanner-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 5457FE7A62DEFDDF4C8BDF97FF25A857 /* QRScanner-dummy.m */; };
 		ECB39165718A505BA266B50DEBC1BC94 /* QRScanner-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 81D3B5BAC9B043CA39EEFA5E297B171C /* QRScanner-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FD23C74A977950EB4139B6D724CC7661 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6DFF15000AFE2A371BF499E7AFDA808 /* Foundation.framework */; };
@@ -54,6 +56,8 @@
 		8667C4E5003098BBAE78ACCE823AC619 /* Pods-QRScanner_Tests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-QRScanner_Tests-acknowledgements.plist"; sourceTree = "<group>"; };
 		8860F7C321AFD26B0007A2B5 /* QRScannerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScannerViewController.swift; sourceTree = "<group>"; };
 		8860F7C721AFD7BD0007A2B5 /* QRScanner.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = QRScanner.bundle; sourceTree = "<group>"; };
+		88B0329D21B0C69C00DD0D88 /* QRScannerSquareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScannerSquareView.swift; sourceTree = "<group>"; };
+		88B0329F21B0C70C00DD0D88 /* QRScannerPermissions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScannerPermissions.swift; sourceTree = "<group>"; };
 		890475396642DB6BBE9EF56B718AB772 /* Pods-QRScanner_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-QRScanner_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
 		89EB8DC56F9DD932E7FE21A36159BFB9 /* Pods-QRScanner_Tests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-QRScanner_Tests-dummy.m"; sourceTree = "<group>"; };
 		9C320E68C1883B794183B4B92BA0909F /* Pods-QRScanner_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-QRScanner_Tests.modulemap"; sourceTree = "<group>"; };
@@ -169,6 +173,8 @@
 			isa = PBXGroup;
 			children = (
 				8860F7C321AFD26B0007A2B5 /* QRScannerViewController.swift */,
+				88B0329D21B0C69C00DD0D88 /* QRScannerSquareView.swift */,
+				88B0329F21B0C70C00DD0D88 /* QRScannerPermissions.swift */,
 			);
 			name = Classes;
 			path = QRScanner/Classes;
@@ -399,7 +405,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				88B0329E21B0C69C00DD0D88 /* QRScannerSquareView.swift in Sources */,
 				8860F7C421AFD26B0007A2B5 /* QRScannerViewController.swift in Sources */,
+				88B032A021B0C70C00DD0D88 /* QRScannerPermissions.swift in Sources */,
 				8D628E7019A4904FB2C827E9C8D1F4EA /* QRScanner-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
