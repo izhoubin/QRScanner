@@ -19,6 +19,9 @@ it, simply add the following line to your Podfile:
 ```ruby
 pod 'QRScanner'
 ```
+## Tips
+
+Don't forget to add Privacy - Camera Usage Description to your Info.plist
 
 ## Author
 
