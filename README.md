@@ -5,11 +5,18 @@
 [![License](https://img.shields.io/cocoapods/l/QRScanner.svg?style=flat)](https://cocoapods.org/pods/QRScanner)
 [![Platform](https://img.shields.io/cocoapods/p/QRScanner.svg?style=flat)](https://cocoapods.org/pods/QRScanner)
 
+## Features
+
+- [x] Simple to use
+- [x] Highly Customizable
+
 ## Example
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
 ## Requirements
+
+iOS 9.0 / Swift 4.2
 
 ## Installation
 
@@ -21,7 +28,7 @@ pod 'QRScanner'
 ```
 ## Tips
 
-Don't forget to add Privacy - Camera Usage Description to your Info.plist
+Don't forget to add Privacy - Camera Usage Description & Privacy - Photo Library Usage Description to your Info.plist
 
 ## Author
 
