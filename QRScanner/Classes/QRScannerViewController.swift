@@ -8,22 +8,23 @@ import UIKit
 import Foundation
 import AVFoundation
 public protocol QRScannerDelegate:class {
-    func qrScannerDidFail(scanner:QRScannerViewController, error:Error)
+    func qrScannerDidFail(scanner:QRScannerViewController, error:QRScannerError)
     func qrScannerDidSuccess(scanner:QRScannerViewController, result:String)
 }
 
 open class QRScannerViewController: UIViewController {
     
+    public weak var delegate: QRScannerDelegate?
+    public let squareView = QRScannerSquareView()
+    
+    var captureSession: AVCaptureSession?
+    var previewLayer: AVCaptureVideoPreviewLayer?
+    
     let cameraPreview: UIView = UIView()
-    let squareView = QRScannerSquareView()
     let maskLayer = CAShapeLayer()
     let torchItem = UIButton()
     let metaDataQueue = DispatchQueue(label: "metaDataQueue")
     let videoQueue = DispatchQueue(label: "videoQueue")
-    
-    public weak var delegate: QRScannerDelegate?
-    var captureSession: AVCaptureSession?
-    var previewLayer: AVCaptureVideoPreviewLayer?
     
     lazy var resourcesBundle:Bundle? = {
         if let path = Bundle.main.path(forResource: "QRScanner", ofType: "framework", inDirectory: "Frameworks"),
@@ -43,6 +44,19 @@ open class QRScannerViewController: UIViewController {
         setUpLayers()
     }
     
+    @objc public func openAlbum(){
+        QRScannerPermissions.authorizePhotoWith { [weak self] in
+            if $0{
+                let picker = UIImagePickerController()
+                picker.sourceType = UIImagePickerController.SourceType.photoLibrary
+                picker.delegate = self
+                self?.present(picker, animated: true, completion: nil)
+            }else{
+                self?.delegate?.qrScannerDidFail(scanner: self!, error: QRScannerError.photoPermissionDenied)
+            }
+        }
+    }
+    
     override open func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         squareView.startAnimation()
@@ -50,7 +64,11 @@ open class QRScannerViewController: UIViewController {
     
     func checkPermissions(){
         QRScannerPermissions.authorizeCameraWith {[weak self] in
-            if $0{ self?.captureSession?.startRunning()}
+            if $0{
+                self?.captureSession?.startRunning()
+            }else{
+                self?.delegate?.qrScannerDidFail(scanner: self!, error: QRScannerError.photoPermissionDenied)
+            }
         }
     }
     
@@ -64,7 +82,7 @@ open class QRScannerViewController: UIViewController {
     }
     
     func setUpLayout(){
-        view.backgroundColor = UIColor.clear
+        view.backgroundColor = UIColor.black
         view.addSubview(cameraPreview)
         cameraPreview.translatesAutoresizingMaskIntoConstraints = false
         cameraPreview.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
@@ -101,11 +119,12 @@ open class QRScannerViewController: UIViewController {
     }
     
     func setUpLayers(){
+        
         previewLayer = AVCaptureVideoPreviewLayer(session: captureSession!)
+        
         let viewLayer = cameraPreview.layer
         previewLayer?.videoGravity = AVLayerVideoGravity.resizeAspectFill
         viewLayer.addSublayer(previewLayer!)
-        
         maskLayer.fillColor = UIColor(white: 0.0, alpha: 0.5).cgColor
         maskLayer.fillRule = CAShapeLayerFillRule.evenOdd
         view.layer.insertSublayer(maskLayer, above: previewLayer)
@@ -123,12 +142,15 @@ open class QRScannerViewController: UIViewController {
     func setupCameraSession() {
         captureSession = AVCaptureSession()
         captureSession?.sessionPreset = AVCaptureSession.Preset.high
+        guard let device = AVCaptureDevice.default(for: AVMediaType.video)else{
+            delegate?.qrScannerDidFail(scanner: self, error: QRScannerError.invalidDevice)
+            return
+        }
         do {
-            let device = AVCaptureDevice.default(for: AVMediaType.video)
-            let input = try AVCaptureDeviceInput(device: device!)
+            let input = try AVCaptureDeviceInput(device: device)
             captureSession?.addInput(input)
         } catch {
-            self.delegate?.qrScannerDidFail(scanner: self, error: error)
+            print(error)
             return
         }
         
@@ -142,7 +164,6 @@ open class QRScannerViewController: UIViewController {
         }
         
         let metaOutput = AVCaptureMetadataOutput()
-        
         if captureSession!.canAddOutput(metaOutput) {
             captureSession?.addOutput(metaOutput)
             metaOutput.metadataObjectTypes = metaOutput.availableMetadataObjectTypes
@@ -166,17 +187,19 @@ extension QRScannerViewController: AVCaptureVideoDataOutputSampleBufferDelegate{
     
     public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         videoQueue.async {[weak self] in
-            guard let sf = self else{return}
             let metadataDict = CMCopyDictionaryOfAttachments(allocator: nil, target: sampleBuffer, attachmentMode: kCMAttachmentMode_ShouldPropagate)
-            if let metadata = metadataDict as? [AnyHashable: Any],let exifMetadata = metadata[kCGImagePropertyExifDictionary as String] as? [AnyHashable: Any],let brightness = exifMetadata[kCGImagePropertyExifBrightnessValue as String] as? NSNumber {
-                if let device = AVCaptureDevice.default(for: AVMediaType.video),device.hasTorch{
-                    DispatchQueue.main.async {
-                        if sf.torchItem.isSelected == true{
-                            sf.torchItem.isHidden = false
-                        }else{
-                            sf.torchItem.isHidden = brightness.floatValue > 0
-                        }
-                    }
+            guard let sf = self,
+                let metadata = metadataDict as? [AnyHashable: Any],
+                let exifMetadata = metadata[kCGImagePropertyExifDictionary as String] as? [AnyHashable: Any],
+                let brightness = exifMetadata[kCGImagePropertyExifBrightnessValue as String] as? NSNumber,
+                let device = AVCaptureDevice.default(for: AVMediaType.video),device.hasTorch else{
+                return
+            }
+            DispatchQueue.main.async {
+                if sf.torchItem.isSelected == true{
+                    sf.torchItem.isHidden = false
+                }else{
+                    sf.torchItem.isHidden = brightness.floatValue > 0
                 }
             }
         }
@@ -200,5 +223,23 @@ extension QRScannerViewController:AVCaptureMetadataOutputObjectsDelegate{
                 }
             }
         }
+    }
+}
+
+extension QRScannerViewController:UIImagePickerControllerDelegate,UINavigationControllerDelegate{
+    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        picker.dismiss(animated: true, completion: nil)
+        guard let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage,
+            let ciImage = CIImage(image: image),
+            let detector:CIDetector = CIDetector(ofType: CIDetectorTypeQRCode, context: nil, options: [CIDetectorAccuracy:CIDetectorAccuracyHigh]) else{
+                return
+        }
+        let features = detector.features(in:ciImage)
+        if let feature = features.first as? CIQRCodeFeature,let result = feature.messageString{
+            delegate?.qrScannerDidSuccess(scanner: self, result: result)
+        }
+    }
+    public func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
     }
 }

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class QRScannerSquareView: UIView {
+public class QRScannerSquareView: UIView {
 
     let scanLine = UIImageView()
     lazy var resourcesBundle:Bundle? = {
@@ -19,20 +19,22 @@ class QRScannerSquareView: UIView {
         }
         return nil
     }()
-    var sizeMultiplier : CGFloat = 0.1 {
+    
+    public var sizeMultiplier : CGFloat = 0.1 {
         didSet{
-            self.draw(self.bounds)
+            setNeedsDisplay()
         }
     }
     
-    var lineWidth : CGFloat = 2 {
+    public var lineWidth : CGFloat = 2 {
         didSet{
-            self.draw(self.bounds)
+            setNeedsDisplay()
         }
     }
-    var lineColor : UIColor = UIColor.green {
+    
+    public var lineColor : UIColor = UIColor.green {
         didSet{
-            self.draw(self.bounds)
+            setNeedsDisplay()
         }
     }
     
@@ -48,7 +50,7 @@ class QRScannerSquareView: UIView {
     func setUp(){
         self.backgroundColor = UIColor.clear
         addSubview(scanLine)
-        scanLine.image = UIImage(named: "QRCode-line", in: resourcesBundle, compatibleWith: nil)
+        
         scanLine.translatesAutoresizingMaskIntoConstraints = false
         scanLine.topAnchor.constraint(equalTo: topAnchor).isActive = true
         scanLine.heightAnchor.constraint(equalToConstant: 2).isActive = true
@@ -113,9 +115,36 @@ class QRScannerSquareView: UIView {
         rectCornerContext?.addLine(to: CGPoint(x: 0, y: 0))
         rectCornerContext?.strokePath()
     }
-    
-    override func draw(_ rect: CGRect) {
+    func drawLine(){
+        guard let image = UIImage(named: "QRCode-line", in: resourcesBundle, compatibleWith: nil)else{
+            return
+        }
+        UIGraphicsBeginImageContextWithOptions(image.size, false, image.scale)
+        lineColor.setFill()
+        guard let context = UIGraphicsGetCurrentContext() else {
+            scanLine.image = image
+            return
+        }
+        
+        context.translateBy(x: 0, y: image.size.height)
+        context.scaleBy(x: 1.0, y: -1.0)
+        context.setBlendMode(CGBlendMode.normal)
+        
+        let rect = CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height)
+        guard let mask = image.cgImage else {
+            scanLine.image = image
+            return
+        }
+        context.clip(to: rect, mask: mask)
+        context.fill(rect)
+        
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        scanLine.image = newImage
+    }
+    override public func draw(_ rect: CGRect) {
         super.draw(rect)
         self.drawCorners()
+        drawLine()
     }
 }
