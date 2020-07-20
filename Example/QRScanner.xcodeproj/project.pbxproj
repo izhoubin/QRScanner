@@ -13,7 +13,6 @@
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
-		88C8A2AB24C583E40013E16D /* image.PNG in Resources */ = {isa = PBXBuildFile; fileRef = 88C8A2AA24C583E40013E16D /* image.PNG */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,7 +29,6 @@
 		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		88584D4821DF0DCC00D8B308 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		88584D4921DF0DCC00D8B308 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
-		88C8A2AA24C583E40013E16D /* image.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = image.PNG; sourceTree = "<group>"; };
 		A1D43018EF291B3FCAA3A3A9 /* Pods-QRScanner_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QRScanner_Tests.debug.xcconfig"; path = "Target Support Files/Pods-QRScanner_Tests/Pods-QRScanner_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		B757569C8A2CA3830BC37BA5 /* Pods_QRScanner_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QRScanner_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7A0A7EC12319A112C253945 /* Pods-QRScanner_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QRScanner_Example.debug.xcconfig"; path = "Target Support Files/Pods-QRScanner_Example/Pods-QRScanner_Example.debug.xcconfig"; sourceTree = "<group>"; };
@@ -106,7 +104,6 @@
 			isa = PBXGroup;
 			children = (
 				016FD77C52A486A66386B696 /* QRScanner.podspec */,
-				88C8A2AA24C583E40013E16D /* image.PNG */,
 				C9B3B7F4E0BC936F4E869D25 /* README.md */,
 				175B4D30F08879EA20504D77 /* LICENSE */,
 			);
@@ -190,7 +187,6 @@
 				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
-				88C8A2AB24C583E40013E16D /* image.PNG in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

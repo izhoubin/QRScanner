@@ -12,9 +12,6 @@
 - [x] Automatic display flashlight button when light is low
 - [x] Mark the rect of qrcode
 
-## ScreenShot
-![ScreenShot](./image.PNG)
-
 ## Example
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
