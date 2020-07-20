@@ -9,6 +9,8 @@
 
 - [x] Simple to use
 - [x] Highly Customizable
+- [x] Automatic display flashlight button when light is low
+- [x] Mark the rect of qrcode
 
 ## Example
 

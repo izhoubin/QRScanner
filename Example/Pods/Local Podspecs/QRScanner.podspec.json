@@ -1,7 +1,7 @@
 {
   "name": "QRScanner",
-  "version": "0.1.0",
-  "summary": "A short description of QRScanner.",
+  "version": "0.0.8",
+  "summary": "Lightweight qrCode Scanner with Swift 5.0.",
   "description": "TODO: Add long description of the pod here.",
   "homepage": "https://github.com/izhoubin/QRScanner",
   "license": {
@@ -13,10 +13,13 @@
   },
   "source": {
     "git": "https://github.com/izhoubin/QRScanner.git",
-    "tag": "0.1.0"
+    "tag": "0.0.8"
   },
   "platforms": {
-    "ios": "8.0"
+    "ios": "9.0"
   },
-  "source_files": "QRScanner/Classes/**/*"
+  "swift_versions": "5.0",
+  "source_files": "QRScanner/Classes/*.*",
+  "resources": "QRScanner/Assets/*.*",
+  "swift_version": "5.0"
 }

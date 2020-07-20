@@ -19,17 +19,15 @@ open class QRScannerViewController: UIViewController {
     
     var captureSession: AVCaptureSession?
     var previewLayer: AVCaptureVideoPreviewLayer?
-    
     let cameraPreview: UIView = UIView()
     let maskLayer = CAShapeLayer()
     let torchItem = UIButton()
     let metaDataQueue = DispatchQueue(label: "metaDataQueue")
     let videoQueue = DispatchQueue(label: "videoQueue")
-    
     lazy var resourcesBundle:Bundle? = {
         if let path = Bundle.main.path(forResource: "QRScanner", ofType: "framework", inDirectory: "Frameworks"),
-        let framework = Bundle(path: path),
-        let bundlePath = framework.path(forResource: "QRScanner", ofType: "bundle"),
+            let framework = Bundle(path: path),
+            let bundlePath = framework.path(forResource: "QRScanner", ofType: "bundle"),
             let bundle = Bundle(path: bundlePath){
             return bundle
         }
@@ -138,7 +136,33 @@ open class QRScannerViewController: UIViewController {
         AudioServicesCreateSystemSoundID(soundUrl, &soundID)
         AudioServicesPlaySystemSound(soundID)
     }
-    
+    func drawRect(resultObj:AVMetadataMachineReadableCodeObject){
+        let path = UIBezierPath()
+        for point in resultObj.corners{
+            let index = resultObj.corners.firstIndex(of: point) ?? 0
+            if index == 0 {
+                path.move(to: point)
+            }else if index == resultObj.corners.count - 1,let first = resultObj.corners.first{
+                path.addLine(to: point)
+                path.move(to: point)
+                path.addLine(to: first)
+                path.close()
+            }else{
+                path.addLine(to: point)
+                path.move(to: point)
+            }
+
+        }
+        for ly in self.maskLayer.sublayers ?? []{
+            ly.removeFromSuperlayer()
+        }
+        let layer = CAShapeLayer()
+        layer.path = path.cgPath
+        layer.lineWidth = 3
+        layer.strokeColor = UIColor.green.cgColor
+        self.maskLayer.addSublayer(layer)
+        self.maskLayer.setNeedsDisplay()
+    }
     func setupCameraSession() {
         captureSession = AVCaptureSession()
         captureSession?.sessionPreset = AVCaptureSession.Preset.high
@@ -157,7 +181,6 @@ open class QRScannerViewController: UIViewController {
         let videoOutput = AVCaptureVideoDataOutput()
         if captureSession!.canAddOutput(videoOutput) {
             captureSession?.addOutput(videoOutput)
-            
             videoOutput.alwaysDiscardsLateVideoFrames = true
             videoOutput.videoSettings = [(kCVPixelBufferPixelFormatTypeKey as String): Int(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)]
             videoOutput.setSampleBufferDelegate(self, queue: videoQueue)
@@ -193,7 +216,7 @@ extension QRScannerViewController: AVCaptureVideoDataOutputSampleBufferDelegate{
                 let exifMetadata = metadata[kCGImagePropertyExifDictionary as String] as? [AnyHashable: Any],
                 let brightness = exifMetadata[kCGImagePropertyExifBrightnessValue as String] as? NSNumber,
                 let device = AVCaptureDevice.default(for: AVMediaType.video),device.hasTorch else{
-                return
+                    return
             }
             DispatchQueue.main.async {
                 if sf.torchItem.isSelected == true{
@@ -210,17 +233,18 @@ extension QRScannerViewController:AVCaptureMetadataOutputObjectsDelegate{
     
     public func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
         metaDataQueue.async {[weak self] in
-            guard let sf = self else{return}
-            for obj in metadataObjects{
-                if let resultObj = obj as? AVMetadataMachineReadableCodeObject,let result = resultObj.stringValue{
-                    DispatchQueue.main.async {
-                        sf.delegate?.qrScannerDidSuccess(scanner: sf, result: result)
-                        sf.playAlertSound()
-                        sf.captureSession?.stopRunning()
-                        sf.squareView.stopAnimation()
-                    }
-                    break
-                }
+            guard let sf = self,
+                let obj = metadataObjects.first,
+                let resultObj = sf.previewLayer?.transformedMetadataObject(for: obj) as? AVMetadataMachineReadableCodeObject,
+                let result = resultObj.stringValue else{
+                    return
+            }
+            sf.captureSession?.stopRunning()
+            DispatchQueue.main.async {
+                sf.drawRect(resultObj: resultObj)
+                sf.delegate?.qrScannerDidSuccess(scanner: sf, result: result)
+                sf.playAlertSound()
+                sf.squareView.stopAnimation()
             }
         }
     }

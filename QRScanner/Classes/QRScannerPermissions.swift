@@ -22,6 +22,12 @@ public class QRScannerPermissions: NSObject {
                     comletion(status == PHAuthorizationStatus.authorized ? true:false)
                 }
             })
+        @unknown default:
+            PHPhotoLibrary.requestAuthorization({ (status) in
+                DispatchQueue.main.async {
+                    comletion(status == PHAuthorizationStatus.authorized ? true:false)
+                }
+            })
         }
     }
     
@@ -39,6 +45,12 @@ public class QRScannerPermissions: NSObject {
             comletion(false)
             break
         case .notDetermined:
+            AVCaptureDevice.requestAccess(for: AVMediaType.video, completionHandler: { (granted: Bool) in
+                DispatchQueue.main.async {
+                    comletion(granted)
+                }
+            })
+        @unknown default:
             AVCaptureDevice.requestAccess(for: AVMediaType.video, completionHandler: { (granted: Bool) in
                 DispatchQueue.main.async {
                     comletion(granted)
