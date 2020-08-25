@@ -7,7 +7,7 @@
 [![Swift](https://img.shields.io/badge/Swift-5.0-brightgreen.svg)](http://cocoapods.org/pods/QRScanner)
 
 ## Preview
-![preview](./preview.PNG)
+![preview](./preview.png)
 ## Features
 A simple iOS qrCode scanner with swift 5.0
 
