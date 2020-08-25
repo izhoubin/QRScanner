@@ -1,5 +1,5 @@
 PODS:
-  - QRScanner (0.0.8)
+  - QRScanner (0.0.9)
 
 DEPENDENCIES:
   - QRScanner (from `../`)
@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  QRScanner: e1b379891f3b41af0fb521e4919e07784bda6eb4
+  QRScanner: b2c5d50e723ce58d009467d3ea0694f63c4ebe7a
 
 PODFILE CHECKSUM: d5001d3e05129b6455a78b440225f06abf641227
 

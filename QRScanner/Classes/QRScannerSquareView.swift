@@ -73,6 +73,7 @@ public class QRScannerSquareView: UIView {
     }
     
     func stopAnimation(){
+        print("stopAnimation")
         scanLine.layer.removeAllAnimations()
     }
     

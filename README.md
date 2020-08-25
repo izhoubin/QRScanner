@@ -4,13 +4,19 @@
 [![Version](https://img.shields.io/cocoapods/v/QRScanner.svg?style=flat)](https://cocoapods.org/pods/QRScanner)
 [![License](https://img.shields.io/cocoapods/l/QRScanner.svg?style=flat)](https://cocoapods.org/pods/QRScanner)
 [![Platform](https://img.shields.io/cocoapods/p/QRScanner.svg?style=flat)](https://cocoapods.org/pods/QRScanner)
+[![Swift](https://img.shields.io/badge/Swift-5.0-brightgreen.svg)](http://cocoapods.org/pods/QRScanner)
 
+## Preview
+![preview](./preview.PNG)
 ## Features
+A simple iOS qrCode scanner with swift 5.0
 
 - [x] Simple to use
 - [x] Highly Customizable
 - [x] Automatic display flashlight button when light is low
 - [x] Mark the rect of qrcode
+- [x] Scan with animation
+- [x] Demo available
 
 ## Example
 

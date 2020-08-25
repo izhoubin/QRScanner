@@ -8,19 +8,9 @@
 
 import UIKit
 import QRScanner
-class ViewController: UIViewController{
+class ViewController: UITableViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-    }
-    @IBAction func startScan(_ sender: Any) {
-        let qr = QRScannerViewController()
-        qr.squareView.lineColor = UIColor.red
-        let item = UIBarButtonItem(title: "Photo album", style: UIBarButtonItem.Style.plain, target: qr, action: #selector(QRScannerViewController.openAlbum))
-        qr.navigationItem.rightBarButtonItem = item
-        qr.delegate = self
-        navigationController?.pushViewController(qr, animated: true)
-        
     }
 }
 extension ViewController:QRScannerDelegate{
@@ -32,10 +22,27 @@ extension ViewController:QRScannerDelegate{
     
     func qrScannerDidSuccess(scanner: QRScannerViewController, result: String) {
         print("success",result)
-//        let alert = UIAlertController(title: "Success!", message: result, preferredStyle: UIAlertController.Style.alert)
-//        alert.addAction(UIAlertAction(title: "Close", style: UIAlertAction.Style.cancel, handler: nil))
-//        scanner.present(alert, animated: true, completion: nil)
+        let alert = UIAlertController(title: "Success!", message: result, preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "Close", style: UIAlertAction.Style.cancel, handler: nil))
+        scanner.present(alert, animated: true, completion: nil)
     }
 }
 
 
+extension ViewController{
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let qr = QRScannerViewController()
+        qr.squareView.lineColor = UIColor.red
+        let item = UIBarButtonItem(title: "Photo album", style: UIBarButtonItem.Style.plain, target: qr, action: #selector(QRScannerViewController.openAlbum))
+        qr.navigationItem.rightBarButtonItem = item
+        qr.delegate = self
+        switch indexPath.row {
+        case 0:
+            navigationController?.pushViewController(qr, animated: true)
+        case 1:
+            present(qr, animated: true, completion: nil)
+        default:
+            break
+        }
+    }
+}

@@ -22,8 +22,8 @@ open class QRScannerViewController: UIViewController {
     let cameraPreview: UIView = UIView()
     let maskLayer = CAShapeLayer()
     let torchItem = UIButton()
-    let metaDataQueue = DispatchQueue(label: "metaDataQueue")
-    let videoQueue = DispatchQueue(label: "videoQueue")
+    let metaDataQueue = DispatchQueue(label: "metaDataQueue",qos: .userInteractive)
+    let videoQueue = DispatchQueue(label: "videoQueue",qos: .background)
     lazy var resourcesBundle:Bundle? = {
         if let path = Bundle.main.path(forResource: "QRScanner", ofType: "framework", inDirectory: "Frameworks"),
             let framework = Bundle(path: path),
@@ -106,6 +106,7 @@ open class QRScannerViewController: UIViewController {
         torchItem.heightAnchor.constraint(equalToConstant: 30).isActive = true
         torchItem.widthAnchor.constraint(equalToConstant: 30).isActive = true
         torchItem.centerXAnchor.constraint(equalTo: squareView.centerXAnchor).isActive = true
+        
     }
     
     @objc func toggleTorch(bt:UIButton){
@@ -117,15 +118,15 @@ open class QRScannerViewController: UIViewController {
     }
     
     func setUpLayers(){
-        
         previewLayer = AVCaptureVideoPreviewLayer(session: captureSession!)
-        
         let viewLayer = cameraPreview.layer
         previewLayer?.videoGravity = AVLayerVideoGravity.resizeAspectFill
         viewLayer.addSublayer(previewLayer!)
         maskLayer.fillColor = UIColor(white: 0.0, alpha: 0.5).cgColor
         maskLayer.fillRule = CAShapeLayerFillRule.evenOdd
         view.layer.insertSublayer(maskLayer, above: previewLayer)
+        view.setNeedsLayout()
+        view.layoutIfNeeded()
     }
     
     func playAlertSound(){
@@ -151,7 +152,7 @@ open class QRScannerViewController: UIViewController {
                 path.addLine(to: point)
                 path.move(to: point)
             }
-
+            
         }
         for ly in self.maskLayer.sublayers ?? []{
             ly.removeFromSuperlayer()
@@ -209,21 +210,18 @@ open class QRScannerViewController: UIViewController {
 extension QRScannerViewController: AVCaptureVideoDataOutputSampleBufferDelegate{
     
     public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        videoQueue.async {[weak self] in
-            let metadataDict = CMCopyDictionaryOfAttachments(allocator: nil, target: sampleBuffer, attachmentMode: kCMAttachmentMode_ShouldPropagate)
-            guard let sf = self,
-                let metadata = metadataDict as? [AnyHashable: Any],
-                let exifMetadata = metadata[kCGImagePropertyExifDictionary as String] as? [AnyHashable: Any],
-                let brightness = exifMetadata[kCGImagePropertyExifBrightnessValue as String] as? NSNumber,
-                let device = AVCaptureDevice.default(for: AVMediaType.video),device.hasTorch else{
-                    return
-            }
-            DispatchQueue.main.async {
-                if sf.torchItem.isSelected == true{
-                    sf.torchItem.isHidden = false
-                }else{
-                    sf.torchItem.isHidden = brightness.floatValue > 0
-                }
+        let metadataDict = CMCopyDictionaryOfAttachments(allocator: nil, target: sampleBuffer, attachmentMode: kCMAttachmentMode_ShouldPropagate)
+        guard let metadata = metadataDict as? [AnyHashable: Any],
+            let exifMetadata = metadata[kCGImagePropertyExifDictionary as String] as? [AnyHashable: Any],
+            let brightness = exifMetadata[kCGImagePropertyExifBrightnessValue as String] as? NSNumber,
+            let device = AVCaptureDevice.default(for: AVMediaType.video),device.hasTorch else{
+                return
+        }
+        DispatchQueue.main.async {[weak self] in
+            if self?.torchItem.isSelected == true{
+                self?.torchItem.isHidden = false
+            }else{
+                self?.torchItem.isHidden = brightness.floatValue > 0
             }
         }
     }
@@ -232,20 +230,20 @@ extension QRScannerViewController: AVCaptureVideoDataOutputSampleBufferDelegate{
 extension QRScannerViewController:AVCaptureMetadataOutputObjectsDelegate{
     
     public func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
-        metaDataQueue.async {[weak self] in
-            guard let sf = self,
-                let obj = metadataObjects.first,
-                let resultObj = sf.previewLayer?.transformedMetadataObject(for: obj) as? AVMetadataMachineReadableCodeObject,
-                let result = resultObj.stringValue else{
-                    return
+        guard let obj = metadataObjects.first,
+            let resultObj = previewLayer?.transformedMetadataObject(for: obj) as? AVMetadataMachineReadableCodeObject,
+            let result = resultObj.stringValue else{
+                return
+        }
+        captureSession?.stopRunning()
+        playAlertSound()
+        DispatchQueue.main.async {[weak self] in
+            guard let sf = self else{
+                return
             }
-            sf.captureSession?.stopRunning()
-            DispatchQueue.main.async {
-                sf.drawRect(resultObj: resultObj)
-                sf.delegate?.qrScannerDidSuccess(scanner: sf, result: result)
-                sf.playAlertSound()
-                sf.squareView.stopAnimation()
-            }
+            sf.drawRect(resultObj: resultObj)
+            sf.squareView.stopAnimation()
+            sf.delegate?.qrScannerDidSuccess(scanner: sf, result: result)
         }
     }
 }
