@@ -22,6 +22,8 @@ public class QRScannerPermissions: NSObject {
                     comletion(status == PHAuthorizationStatus.authorized ? true:false)
                 }
             })
+        case .limited:
+            comletion(true)
         @unknown default:
             PHPhotoLibrary.requestAuthorization({ (status) in
                 DispatchQueue.main.async {

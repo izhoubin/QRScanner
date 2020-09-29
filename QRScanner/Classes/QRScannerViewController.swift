@@ -26,9 +26,9 @@ open class QRScannerViewController: UIViewController {
     let videoQueue = DispatchQueue(label: "videoQueue",qos: .background)
     lazy var resourcesBundle:Bundle? = {
         if let path = Bundle.main.path(forResource: "QRScanner", ofType: "framework", inDirectory: "Frameworks"),
-            let framework = Bundle(path: path),
-            let bundlePath = framework.path(forResource: "QRScanner", ofType: "bundle"),
-            let bundle = Bundle(path: bundlePath){
+           let framework = Bundle(path: path),
+           let bundlePath = framework.path(forResource: "QRScanner", ofType: "bundle"),
+           let bundle = Bundle(path: bundlePath){
             return bundle
         }
         return nil
@@ -138,7 +138,9 @@ open class QRScannerViewController: UIViewController {
         AudioServicesPlaySystemSound(soundID)
     }
     func drawRect(resultObj:AVMetadataMachineReadableCodeObject){
+        #if !targetEnvironment(simulator)
         let path = UIBezierPath()
+        
         for point in resultObj.corners{
             let index = resultObj.corners.firstIndex(of: point) ?? 0
             if index == 0 {
@@ -154,6 +156,7 @@ open class QRScannerViewController: UIViewController {
             }
             
         }
+        
         for ly in self.maskLayer.sublayers ?? []{
             ly.removeFromSuperlayer()
         }
@@ -163,6 +166,7 @@ open class QRScannerViewController: UIViewController {
         layer.strokeColor = UIColor.green.cgColor
         self.maskLayer.addSublayer(layer)
         self.maskLayer.setNeedsDisplay()
+        #endif
     }
     func setupCameraSession() {
         captureSession = AVCaptureSession()
@@ -212,10 +216,10 @@ extension QRScannerViewController: AVCaptureVideoDataOutputSampleBufferDelegate{
     public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         let metadataDict = CMCopyDictionaryOfAttachments(allocator: nil, target: sampleBuffer, attachmentMode: kCMAttachmentMode_ShouldPropagate)
         guard let metadata = metadataDict as? [AnyHashable: Any],
-            let exifMetadata = metadata[kCGImagePropertyExifDictionary as String] as? [AnyHashable: Any],
-            let brightness = exifMetadata[kCGImagePropertyExifBrightnessValue as String] as? NSNumber,
-            let device = AVCaptureDevice.default(for: AVMediaType.video),device.hasTorch else{
-                return
+              let exifMetadata = metadata[kCGImagePropertyExifDictionary as String] as? [AnyHashable: Any],
+              let brightness = exifMetadata[kCGImagePropertyExifBrightnessValue as String] as? NSNumber,
+              let device = AVCaptureDevice.default(for: AVMediaType.video),device.hasTorch else{
+            return
         }
         DispatchQueue.main.async {[weak self] in
             if self?.torchItem.isSelected == true{
@@ -231,9 +235,9 @@ extension QRScannerViewController:AVCaptureMetadataOutputObjectsDelegate{
     
     public func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
         guard let obj = metadataObjects.first,
-            let resultObj = previewLayer?.transformedMetadataObject(for: obj) as? AVMetadataMachineReadableCodeObject,
-            let result = resultObj.stringValue else{
-                return
+              let resultObj = previewLayer?.transformedMetadataObject(for: obj) as? AVMetadataMachineReadableCodeObject,
+              let result = resultObj.stringValue else{
+            return
         }
         captureSession?.stopRunning()
         playAlertSound()
@@ -252,9 +256,9 @@ extension QRScannerViewController:UIImagePickerControllerDelegate,UINavigationCo
     public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true, completion: nil)
         guard let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage,
-            let ciImage = CIImage(image: image),
-            let detector:CIDetector = CIDetector(ofType: CIDetectorTypeQRCode, context: nil, options: [CIDetectorAccuracy:CIDetectorAccuracyHigh]) else{
-                return
+              let ciImage = CIImage(image: image),
+              let detector:CIDetector = CIDetector(ofType: CIDetectorTypeQRCode, context: nil, options: [CIDetectorAccuracy:CIDetectorAccuracyHigh]) else{
+            return
         }
         let features = detector.features(in:ciImage)
         if let feature = features.first as? CIQRCodeFeature,let result = feature.messageString{
