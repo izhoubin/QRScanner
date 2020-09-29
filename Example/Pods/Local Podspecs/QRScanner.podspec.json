@@ -1,7 +1,7 @@
 {
   "name": "QRScanner",
   "version": "0.1.0",
-  "summary": "Lightweight qrCode Scanner with Swift 5.0.",
+  "summary": "Lightweight qrCode Scanner with Swift",
   "description": "TODO: Add long description of the pod here.",
   "homepage": "https://github.com/izhoubin/QRScanner",
   "license": {

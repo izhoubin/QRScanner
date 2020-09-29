@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		54E88F8C111E5AA71C7308F7 /* Pods_QRScanner_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 067FE5647A586900819878B6 /* Pods_QRScanner_Example.framework */; };
+		4BB791D5F02D44753A87F38F /* Pods_QRScanner_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D20D8A0615CFB463538E2043 /* Pods_QRScanner_Example.framework */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
@@ -19,7 +19,6 @@
 /* Begin PBXFileReference section */
 		016FD77C52A486A66386B696 /* QRScanner.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = QRScanner.podspec; path = ../QRScanner.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		047FDC514FF6DFCC61644918 /* Pods-QRScanner_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QRScanner_Example.release.xcconfig"; path = "Target Support Files/Pods-QRScanner_Example/Pods-QRScanner_Example.release.xcconfig"; sourceTree = "<group>"; };
-		067FE5647A586900819878B6 /* Pods_QRScanner_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QRScanner_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		175B4D30F08879EA20504D77 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* QRScanner_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QRScanner_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -33,6 +32,7 @@
 		B757569C8A2CA3830BC37BA5 /* Pods_QRScanner_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QRScanner_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7A0A7EC12319A112C253945 /* Pods-QRScanner_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QRScanner_Example.debug.xcconfig"; path = "Target Support Files/Pods-QRScanner_Example/Pods-QRScanner_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		C9B3B7F4E0BC936F4E869D25 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		D20D8A0615CFB463538E2043 /* Pods_QRScanner_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QRScanner_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9D97CB6C2DEDAF0CD3A82EA /* Pods-QRScanner_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QRScanner_Tests.release.xcconfig"; path = "Target Support Files/Pods-QRScanner_Tests/Pods-QRScanner_Tests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -41,7 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				54E88F8C111E5AA71C7308F7 /* Pods_QRScanner_Example.framework in Frameworks */,
+				4BB791D5F02D44753A87F38F /* Pods_QRScanner_Example.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,8 +114,8 @@
 		E2C0B84923819A37A99B18CF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				067FE5647A586900819878B6 /* Pods_QRScanner_Example.framework */,
 				B757569C8A2CA3830BC37BA5 /* Pods_QRScanner_Tests.framework */,
+				D20D8A0615CFB463538E2043 /* Pods_QRScanner_Example.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -131,7 +131,7 @@
 				607FACCC1AFB9204008FA782 /* Sources */,
 				607FACCD1AFB9204008FA782 /* Frameworks */,
 				607FACCE1AFB9204008FA782 /* Resources */,
-				43CF0FC249C84031DA4C977E /* [CP] Embed Pods Frameworks */,
+				17AE5383F4135018ECA0D4E5 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -193,7 +193,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		43CF0FC249C84031DA4C977E /* [CP] Embed Pods Frameworks */ = {
+		17AE5383F4135018ECA0D4E5 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
